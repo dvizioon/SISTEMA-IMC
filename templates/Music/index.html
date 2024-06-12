@@ -1,0 +1,208 @@
+<!-- Modal -->
+<div id="modalMusics"
+    class="hidden fixed gap-2 inset-0 z-20 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <!-- Conteúdo do modal -->
+        <h2 class="text-lg font-semibold mb-4">Escolha o Álbum</h2>
+        <ul>
+            <li class="flex justify-between items-center">
+                <span class="text-gray-800">Indisponivel ...</span>
+                <button class="text-blue-500 hover:text-blue-700">
+                    <span class="material-icons">queue_music</span>
+                </button>
+            </li>
+        </ul>
+        <button id="fecharModalMusics" class="text-red-500 mt-4">Fechar</button>
+    </div>
+</div>
+
+
+<div class="containerPlayer rounded-lg shadow-lg w-96 h-96 overflow-hidden relative">
+    <div class=" w-full p-2 flex align-items-center justify-between ">
+        <button id="abrirModalMusics"
+            class="text-red-500 border border-gray-500 rounded-full p-2 flex align-items-center justify-center ">
+            <span class="material-symbols-outlined">
+                library_music
+            </span>
+        </button>
+        <button id="fecharPlayer"
+            class="text-red-500 border border-gray-500 rounded-full p-2 flex align-items-center justify-center ">
+            <span class="iconClose material-icons">close</span>
+        </button>
+    </div>
+    <div class="mb-4 flex justify-center items-center mt-5">
+        <img src="https://avatars.githubusercontent.com/u/147283064?v=4" alt="Capa do Álbum"
+            class="rounded-lg w-32 h-32 object-cover">
+    </div>
+
+    <audio id="audioPlayer" class="w-full" volume="0.1">
+        <!-- Definindo o volume inicial para 0.2 (20%) -->
+        <source src="https://65381g.ha.azioncdn.net/f/e/b/2/hungriahiphop-umpedido-bda0a438.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <div class="text-center mt-4">
+        <h2 class="text-lg font-semibold">Um Pedido</h2>
+        <p class="text-gray-500">Hungria Hip Hop</p>
+    </div>
+
+    <div class="flex justify-center items-center space-x-4 mt-4">
+        <button id="retroceder" class="text-gray-800 hover:text-gray-600">
+            <span class="material-icons">skip_previous</span>
+        </button>
+
+        <button id="playPause" class="text-gray-800 hover:text-gray-600">
+            <span class="material-icons" id="playIcon">play_arrow</span>
+        </button>
+
+        <button id="avancar" class="text-gray-800 hover:text-gray-600">
+            <span class="material-icons">skip_next</span>
+        </button>
+    </div>
+
+    <!-- Controle de volume -->
+    <div class="flex justify-center items-center mt-4">
+        <button id="volumeDown" class="text-gray-800 hover:text-gray-600">
+            <span class="material-icons">volume_down</span>
+        </button>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.1" class="mx-4 w-32">
+        <button id="volumeUp" class="text-gray-800 hover:text-gray-600">
+            <span class="material-icons">volume_up</span>
+        </button>
+        <button id="repeat_control" class="text-gray-800 hover:text-gray-600">
+            <span id="iconRepeat" class="material-icons">repeat</span>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    const audioPlayer = document.getElementById('audioPlayer');
+    const containerPlayer = document.querySelector(".containerPlayer")
+    const playPauseButton = document.getElementById('playPause');
+    const playIcon = document.getElementById('playIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeUpButton = document.getElementById('volumeUp');
+    const volumeDownButton = document.getElementById('volumeDown');
+    const fecharPlayerButton = document.getElementById('fecharPlayer');
+    const fecharModalButton = document.getElementById('fecharModalMusics');
+    const abrirModalButton = document.getElementById('abrirModalMusics');
+    const modal = document.getElementById('modalMusics');
+    const repeatControl = document.getElementById('repeat_control')
+    const iconRepeat = document.getElementById('iconRepeat')
+    audioPlayer.volume = 0.1
+
+    // Verifica o estado do player ao carregar a página
+    const closeMyPlayer = localStorage.getItem('closePlayer');
+    const icon = document.querySelector(".iconClose");
+
+    if (closeMyPlayer === 'h-14') {
+        containerPlayer.classList.remove('h-96');
+        containerPlayer.classList.add('h-14');
+        icon.innerHTML = "open_in_full";
+    } else {
+        containerPlayer.classList.add('h-96');
+        icon.innerHTML = "close";
+    }
+
+
+    function togglePlayPause() {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            playIcon.textContent = 'pause';
+        } else {
+            audioPlayer.pause();
+            playIcon.textContent = 'play_arrow';
+        }
+    }
+
+    function retroceder() {
+        audioPlayer.currentTime -= 10; 
+    }
+
+    function avancar() {
+        audioPlayer.currentTime += 10; 
+    }
+
+    function aumentarVolume() {
+        audioPlayer.volume += 0.1; 
+    }
+
+    function diminuirVolume() {
+        audioPlayer.volume -= 0.1; 
+    }
+
+
+
+    let repeatMode = 'none'; 
+
+    repeatControl.addEventListener('click', () => {
+        if (repeatMode === 'none') {
+            repeatMode = 'one';
+            iconRepeat.innerHTML = "repeat_one";
+        } else if (repeatMode === 'one') {
+            repeatMode = 'all';
+            iconRepeat.innerHTML = "repeat";
+        } else {
+            repeatMode = 'none';
+            iconRepeat.innerHTML = "repeat";
+        }
+    });
+
+    audioPlayer.addEventListener('ended', () => {
+        if (repeatMode === 'one') {
+            audioPlayer.currentTime = 0;
+            audioPlayer.play();
+        } else if (repeatMode === 'all') {
+            audioPlayer.currentTime = 0;
+            audioPlayer.play();
+        }
+         else {
+            playIcon.textContent = 'play_arrow';
+        }
+    });
+
+
+
+    function fecharPlayer() {
+        var icon = document.querySelector(".iconClose")
+        // Aqui você pode adicionar o código para fechar o player
+        var token = containerPlayer.classList.toggle('h-96')
+
+
+        if (!token) {
+            var closePlayer = localStorage.setItem('closePlayer', 'h-14')
+            icon.innerHTML = "open_in_full"
+            containerPlayer.classList.remove('h-96')
+            containerPlayer.classList.add('h-14')
+            var closePlayer = localStorage.setItem('closePlayer', 'h-14')
+        }
+        else {
+            icon.innerHTML = "close"
+            var closePlayer = localStorage.setItem('closePlayer', 'h-96')
+        }
+        // containerPlayer.classList.remove('h-14')
+    }
+
+    function fecharModalMusic() {
+        modal.classList.add('hidden');
+    }
+
+    function abrirModalAlbum() {
+        modal.classList.remove('hidden');
+    }
+
+    playPauseButton.addEventListener('click', togglePlayPause);
+    document.getElementById('retroceder').addEventListener('click', retroceder);
+    document.getElementById('avancar').addEventListener('click', avancar);
+    volumeUpButton.addEventListener('click', aumentarVolume);
+    volumeDownButton.addEventListener('click', diminuirVolume);
+    fecharPlayerButton.addEventListener('click', fecharPlayer);
+    fecharModalButton.addEventListener('click', fecharModalMusic);
+    abrirModalButton.addEventListener('click', abrirModalAlbum);
+
+    // Atualiza o volume do player quando o controle deslizante é alterado
+    volumeSlider.addEventListener('input', function () {
+        audioPlayer.volume = volumeSlider.value;
+    });
+</script>

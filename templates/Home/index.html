@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body-Health</title>
+    <!-- Adicione o link para o arquivo CSS do Tailwind -->
+    <link href="/plugins/TailwindCss/min.css" rel="stylesheet">
+    <link href="/plugins/MaterialIcon/icon.css" rel="stylesheet">
+    <script href="/plugins/tailwindCss/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="/plugins/chartJs/index.js" async></script>
+
+    <script>
+        window.onload = function () {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+
+            if (savedTheme === 'dark') {
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+            }
+        };
+    </script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: all 0.4s;
+            overflow: hidden;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        .containerPainel {
+            display: flex;
+            align-items: flex-start;
+
+            width: 100%;
+            height: 100%;
+            flex-direction: row;
+            justify-content: flex-start;
+            display: none;
+            overflow: hidden;
+        }
+
+        .headerPainel {
+            display: none;
+        }
+
+        .menu {
+            max-width: 25%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .content {
+            max-width: 75%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
+    <style>
+        /* HTML: <div class="loader"></div> */
+        .loader {
+            width: 80px;
+            height: 40px;
+            border-radius: 0 0 100px 100px;
+            border: 5px solid #538a2d;
+            border-top: 0;
+            box-sizing: border-box;
+            background:
+                radial-gradient(farthest-side at top, #0000 calc(100% - 5px), #e7ef9d calc(100% - 4px)),
+                radial-gradient(2px 3px, #5c4037 89%, #0000) 0 0/17px 12px,
+                #ff1643;
+            --c: radial-gradient(farthest-side, #000 94%, #0000);
+            -webkit-mask:
+                linear-gradient(#0000 0 0),
+                var(--c) 12px -8px,
+                var(--c) 29px -8px,
+                var(--c) 45px -6px,
+                var(--c) 22px -2px,
+                var(--c) 34px 6px,
+                var(--c) 21px 6px,
+                linear-gradient(#000 0 0);
+            mask:
+                linear-gradient(#000 0 0),
+                var(--c) 12px -8px,
+                var(--c) 29px -8px,
+                var(--c) 45px -6px,
+                var(--c) 22px -2px,
+                var(--c) 34px 6px,
+                var(--c) 21px 6px,
+                linear-gradient(#0000 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude, add, add, add, add, add, add;
+            -webkit-mask-repeat: no-repeat;
+            animation: l8 3s infinite;
+        }
+    
+        @keyframes l8 {
+            0% {
+                -webkit-mask-size: auto, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0
+            }
+    
+            15% {
+                -webkit-mask-size: auto, 20px 20px, 0 0, 0 0, 0 0, 0 0, 0 0
+            }
+    
+            30% {
+                -webkit-mask-size: auto, 20px 20px, 20px 20px, 0 0, 0 0, 0 0, 0 0
+            }
+    
+            45% {
+                -webkit-mask-size: auto, 20px 20px, 20px 20px, 20px 20px, 0 0, 0 0, 0 0
+            }
+    
+            60% {
+                -webkit-mask-size: auto, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 0 0, 0 0
+            }
+    
+            75% {
+                -webkit-mask-size: auto, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 0 0
+            }
+    
+            90%,
+            100% {
+                -webkit-mask-size: auto, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 20px 20px
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+
+    <header class="headerPainel bg-white shadow-md p-4 w-full items-center flex justify-between">
+        <div class="container mx-auto flex gap-3 items-center">
+
+            <button id="menu-toggle">
+                <svg class="h-6 w-6 fill-current text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                        d="M4 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
+                </svg>
+            </button>
+            <h1 class="text-xl font-bold text-gray-800">Body-Health</h1>
+        </div>
+    </header>
+
+
+    <div class="relative containerPainel p-2 gap-2">
+
+        <div id="menu" class="menu col-span-3 md:col-span-1 w-full bg-white shadow-md p-4 show">
+            <div class="mb-4 flex align-items-center content-center justify-between gap-2">
+                <div class="w-full h-full">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Menu</h2>
+                    <ul class="flex flex-col space-y-2">
+                        <li class="listMain border border-gray-500 border-dashed"><a href="#"
+                                class="menu-item text-gray-800 w-full" data-url="/calcular"> Calcular
+                                IMC</a></li>
+                        <li class="border border-gray-500 border-dashed"><a href="#" class="menu-item text-gray-800"
+                                data-url="/config">Configuração</a></li>
+                        <li class="border border-gray-500 border-dashed"><a href="#" class="menu-item text-gray-800"
+                                data-url="/banco">Banco de
+                                Dados</a></li>
+                        <li class="border border-gray-500 border-dashed"><a href="#" class="menu-item text-gray-800"
+                                data-url="/about">Sobre IMC</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex w-full h-full align-items-center content-center justify-center">
+                    <img src="/Assets/Logos/Logo.svg" class="w-full h-full">
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Social</h2>
+                <ul class="flex flex-col space-y-2">
+                    <li>
+                        <a href="#" class="text-gray-800 hover:text-gray-600 flex items-center space-x-2">
+                            <span class="material-icons">rocket_launch</span>
+                            Instagram
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {{card | safe}}
+        </div>
+
+        <div id="content" class="content w-full col-span-3 md:col-span-2 bg-white shadow-md p-4 flex flex-wrap gap-4">
+        </div>
+        <div id="musicContainer" class="absolute bottom-5 w-96 flex align-items-center justify-center content-center"
+            style="right: 8rem;">
+        </div>
+        <div id="assistentContainer"
+            class="absolute  shadow-lg w-96 flex align-items-center justify-center content-center">
+
+        </div>
+    </div>
+   
+    <script>
+        $(document).ready(function () {
+            const menuToggle = $('#menu-toggle');
+            const menu = $('#menu');
+
+            menuToggle.click(function () {
+                menu.toggleClass("show hidden");
+            });
+
+            $('.menu-item').click(function (event) {
+                event.preventDefault();
+                var url = $(this).data('url');
+                loadContent(url);
+            });
+
+            var lastUrl = localStorage.getItem('lastUrl');
+
+            if (!lastUrl || lastUrl === "/splash") {
+                $.ajax({
+                    url: "/splash",
+                    cache: false,
+                    method: "GET",
+                    success: function (response) {
+                        $('body').html(response);
+                        initializeAfterSplash(); // Chamada para uma função para inicialização após o carregamento de /splash
+                    }
+                });
+            } else {
+                loadContent(lastUrl);
+                initializeAfterSplash();
+                rendeAssitent();
+                rendeMusic();
+            }
+        });
+
+        function initializeAfterSplash() {
+            $(".containerPainel").css("display", "block");
+            $(".containerPainel").css("display", "flex");
+            $(".headerPainel").css("display", "block");
+        }
+
+        function loadContent(url) {
+            $('#content').load(url);
+            localStorage.setItem('lastUrl', url);
+        }
+
+        function rendeMusic() {
+
+            $.ajax({
+                url: "/music",
+                cache: false,
+                method: "GET",
+                success: function (response) {
+                    $("#musicContainer").html(response)
+                }
+            });
+
+        }
+
+        function rendeAssitent() {
+
+            $.ajax({
+                url: "/chat",
+                cache: false,
+                method: "GET",
+                success: function (response) {
+                    $("#assistentContainer").html(response)
+                }
+            });
+
+        }
+
+
+        function calcularIMC() {
+
+            loadContent("/calcular");
+        }
+
+        // Redirecionar para a rota padrão se for a primeira vez que o usuário visita a página
+        $(document).ready(function () {
+            var lastUrl = localStorage.getItem('lastUrl');
+            if (!lastUrl) {
+                loadContent(defaultContentURL);
+            }
+        });
+
+    </script>
+
+    <style>
+        .dark body {
+            background-color: #1a202c;
+            /* bg-gray-900 */
+            color: #a0aec0;
+            /* text-gray-400 */
+        }
+
+        .dark .bg-white {
+            background-color: #2d3748;
+            /* bg-gray-800 */
+            color: #a0aec0;
+            /* text-gray-400 */
+        }
+
+        .dark .text-gray-800 {
+            color: #a0aec0;
+            /* text-gray-400 */
+        }
+
+        .dark .text-gray-600 {
+            color: #718096;
+            /* text-gray-500 */
+        }
+
+        .dark .bg-gray-100 {
+            background-color: #2d3748;
+            /* bg-gray-800 */
+        }
+
+        .dark .bg-gray-200 {
+            background-color: #4a5568;
+            /* bg-gray-700 */
+        }
+    </style>
+
+</body>
+
+</html>

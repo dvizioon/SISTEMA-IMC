@@ -1,0 +1,761 @@
+<div class="w-full overflow-hidden">
+    {{form | safe}}
+
+
+    <div id="modalChart" class="hidden fixed z-20 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div style="cursor:pointer;"
+                            class="closeModalGrafico mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div
+                            style="width: 100%; display: flex; align-items: center;flex-direction:column; justify-content: center;height: 100%;">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Peso Ideal
+                            </h3>
+                            <div class="mt-2 w-full flex flex-col items-center justify-center">
+                                <div class="w-full flex flex-wrap justify-around">
+                                    <canvas id="myChart1" class="m-2"></canvas>
+                                    <canvas id="myChart2" class="m-2"></canvas>
+                                    <canvas id="myChart3" class="m-2"></canvas>
+                                </div>
+                                <div class="myCalculoCharts p-5 mt-4 flex flex-wrap gap-3 justify-center w-full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalNote" class="fixed z-20 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div style="cursor:pointer;"
+                            class="closeModalNote mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div class="mt-3 w-full text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Bloco de Notas <span class="material-symbols-outlined">
+                                    note_stack_add
+                                </span>
+                            </h3>
+                            <div style="display: flex;">
+                                <div id="audioContainer"
+                                    class="flex flex-col items-center justify-center w-1/2 bg-gray-100 p-4">
+                                    <audio controls class="w-full mb-4" id="audioElement">
+                                        <source type="audio/mpeg">
+                                        Seu navegador não suporta o elemento de áudio.
+                                    </audio>
+                                </div>
+                                <pre class="blockNote resize border rounded-md overflow-hidden overflow-y-scroll disabled"
+                                    disabled style="width: 100%; height: 25rem; white-space: pre-wrap;"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Imprimir
+                    </button>
+                    <button type="button"
+                        class="closeModalNote_2 mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="modal_imc">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10"
+                            id="icon_wrapper">
+                            <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                id="result_icon">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="flex flex-row justify-between w-full align-items-center">
+                            <div class="flex flex-row justify-between w-full items-center">
+                                <div class="flex-grow">
+                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                            Resultado do IMC
+                                        </h3>
+                                        <div class="mt-2">
+                                            <div id="resultado_imc"></div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="display-flex contetResultAdicional p-5 mt-4 flex-column overflow-hidden overflow-y-scroll gap-3 align-items-center justify-content-center w-full">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                        onclick="fecharModal()" id="fechar_modal_btn">
+                        Fechar
+                    </button>
+                    <button type="button"
+                        class="salvar_imprimir_btn w-full inline-flex justify-center gap-2 align-items-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                        id="salvar_imprimir_btn">
+                        Salvar
+                        <span class="material-symbols-outlined">
+                            database
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_carregamento" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start flex align-items-center justify-content-center">
+                        <div class="flex align-items-center justify-content-center">
+
+                            <div class="loader"></div>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Carregando...
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm leading-5 text-gray-500">
+                                    Por favor, aguarde enquanto processamos sua solicitação.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_erro" class="fixed z-10 inset-0 overflow-y-auto hidden flex items-center justify-center">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div style="cursor:pointer;"
+                            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600 closeModalErro" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Ocorreu um erro
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm leading-5 text-gray-500 classErroText">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        async function fetchAudio(url) {
+            const audioElement = document.getElementById('audioElement');
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Erro ao obter o áudio');
+                }
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                // Definindo o atributo src com a URL do áudio
+                audioElement.src = audioUrl;
+
+                return audioElement
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // fetchAudio('http://127.0.0.1:8080/api/audio/audio_1');
+
+    </script>
+
+    <script>
+        var myChart1, myChart2, myChart3;
+
+        function abrirModal() {
+            document.getElementById("modal_imc").classList.remove("hidden");
+        }
+
+        function fecharModal() {
+            document.getElementById("modal_imc").classList.add("hidden");
+        }
+
+        function abrirModalCarregamento() {
+            document.getElementById("modal_carregamento").classList.remove("hidden");
+        }
+
+        function fecharModalCarregamento() {
+            document.getElementById("modal_carregamento").classList.add("hidden");
+        }
+
+        function abrirModalErro(erroText) {
+            document.getElementById("modal_erro").classList.remove("hidden");
+            document.querySelector(".classErroText").innerHTML = `${erroText}`
+        }
+
+        document.querySelector(".closeModalErro").addEventListener("click", () => {
+            document.getElementById("modal_erro").classList.add("hidden");
+        })
+
+        document.querySelector('.closeModalGrafico').addEventListener("click", () => {
+            document.getElementById("modalChart").classList.add("hidden");
+            if (window.myChart != null) {
+                window.myChart.destroy();
+            }
+        })
+
+        document.querySelector('.closeModalNote').addEventListener("click", () => {
+            const audioElement = document.getElementById('audioElement');
+            audioElement.pause();
+            audioElement.currentTime = 0;
+            document.getElementById("modalNote").classList.add("hidden");
+        });
+
+        document.querySelector('.closeModalNote_2').addEventListener("click", () => {
+            const audioElement = document.getElementById('audioElement');
+            audioElement.pause();
+            audioElement.currentTime = 0;
+            document.getElementById("modalNote").classList.add("hidden");
+        });
+
+        function openGrafico(data) {
+
+            let dataChart = JSON.parse(decodeURIComponent(data));
+            // console.log(dataChart);
+
+            // Verificação de dados
+            const { categoria, imc, peso_ideal } = dataChart;
+            const {
+                altura = 0,
+                categoria: categoria_imc = "N/A",
+                imc: imc_atual = 0,
+                peso_a_ajustar = 0,
+                peso_atual = 0,
+                peso_ideal: peso_ideal_ajustado = 0,
+                porcentagem_ajuste = 0
+            } = peso_ideal || {};
+
+            // Destrói os gráficos existentes, se houver
+            if (myChart1) myChart1.destroy();
+            if (myChart2) myChart2.destroy();
+            if (myChart3) myChart3.destroy();
+
+            // Criação do primeiro gráfico (coluna)
+            var ctx1 = document.getElementById('myChart1').getContext('2d');
+            myChart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['IMC Atual', 'Peso Ideal'],
+                    datasets: [{
+                        label: "Valores",
+                        data: [imc_atual, peso_ideal_ajustado],
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'IMC Atual e Peso Ideal'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let value = context.raw;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return context.label + ': ' + value + ' (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Criação do segundo gráfico
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+            myChart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Peso Atual', 'Peso a Ajustar'],
+                    datasets: [{
+                        label: "Pesos",
+                        data: [peso_atual, peso_a_ajustar],
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Peso Atual e Peso a Ajustar'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let value = context.raw;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return context.label + ': ' + value + ' (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Criação do terceiro gráfico
+            var ctx3 = document.getElementById('myChart3').getContext('2d');
+            myChart3 = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Altura', 'Peso Atual', 'Peso Ideal'],
+                    datasets: [{
+                        label: "Medidas",
+                        data: [altura, peso_atual, peso_ideal_ajustado],
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Altura e Pesos'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let value = context.raw;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return context.label + ': ' + value + ' (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Criação dos cards
+            const cardContainer = document.querySelector(".myCalculoCharts");
+            cardContainer.innerHTML = ''; // Limpa os cards anteriores
+            const cardData = [
+                { title: "Altura", value: altura + " cm", icon: "📏", color: "bg-blue-100" },
+                { title: "Categoria IMC", value: categoria_imc, icon: "🔍", color: "bg-green-100" },
+                { title: "IMC Atual", value: imc_atual, icon: "📊", color: "bg-red-100" },
+                { title: "Peso a Ajustar", value: peso_a_ajustar + " kg", icon: "⚖️", color: "bg-yellow-100" },
+                { title: "Peso Atual", value: peso_atual + " kg", icon: "🏋️", color: "bg-purple-100" },
+                { title: "Peso Ideal Ajustado", value: peso_ideal_ajustado + " kg", icon: "🎯", color: "bg-pink-100" },
+                { title: "Porcentagem de Ajuste", value: porcentagem_ajuste + "%", icon: "📈", color: "bg-teal-100" }
+            ];
+
+            cardData.forEach(card => {
+                const cardElement = document.createElement("div");
+                cardElement.classList.add("card", "p-4", card.color, "rounded-lg", "shadow-md", "flex-grow", "min-w-[150px]", "hover:bg-opacity-75", "transition", "duration-300", "ease-in-out", "transform", "hover:scale-105", "cursor-pointer");
+                cardElement.innerHTML = `
+            <div class="card-header flex items-center">
+                <span class="text-2xl mr-2">${card.icon}</span>
+                <h3 class="text-lg font-semibold">${card.title}</h3>
+            </div>
+            <div class="card-body mt-2">
+                <p class="text-sm">${card.value}</p>
+            </div>
+        `;
+                cardContainer.appendChild(cardElement);
+            });
+
+            document.getElementById("modalChart").classList.remove("hidden");
+        }
+
+        function openNoteBlock(data, type) {
+            let dataAI = JSON.parse(decodeURIComponent(data));
+            const { recomendacoes } = dataAI;
+
+            // Selecionando o elemento do modal
+            const modalNote = document.getElementById("modalNote");
+
+            // Removendo a classe 'hidden' para exibir o modal
+            modalNote.classList.remove("hidden");
+
+            // Selecionando o blockNote onde as recomendações serão exibidas
+            const blockNote = modalNote.querySelector(".blockNote");
+
+            // Limpando o conteúdo atual, caso haja algum
+            blockNote.innerHTML = "";
+
+            if (type === "refeicoes_horario") {
+
+                // Formatando e adicionando as recomendações de horários das refeições
+                const refeicoesHorario = formatarRecomendacoes(recomendacoes.refeicoes_horario.response);
+                blockNote.innerHTML += "Horários das Refeições:\n" + refeicoesHorario;
+                fetchAudio('http://127.0.0.1:8080/api/audio/audio_1');
+
+            }
+            else if (type === "atividades_indicadas") {
+                // Formatando e adicionando as recomendações de atividades indicadas
+                const atividadesIndicadas = formatarRecomendacoes(recomendacoes.atividades_indicadas.response);
+                blockNote.innerHTML += "Atividades Recomendadas:\n" + atividadesIndicadas + "\n\n";
+                fetchAudio('http://127.0.0.1:8080/api/audio/audio_2');
+            }
+
+
+        }
+
+        // Função auxiliar para formatar as recomendações
+        function formatarRecomendacoes(recomendacoes) {
+            // Remove os delimitadores específicos como '$@$v=v1.13$@$'
+            let textoFormatado = recomendacoes.replace(/\$@\$\w+=v\d+\.\d+\$@\$/g, "");
+
+            // Substitua ** por negrito e * por -
+            textoFormatado = textoFormatado.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+            textoFormatado = textoFormatado.replace(/\*/g, "-");
+
+            return textoFormatado;
+        }
+
+
+        function sendCalculo() {
+            const contetResultAdicional = document.querySelector(".contetResultAdicional")
+            const altura = document.getElementById("altura").value;
+            const peso = document.getElementById("peso").value;
+            const metodo = document.getElementById("metodo").value
+            // Cria um objeto JSON com os valores de altura e peso
+
+            // Verifica se os campos estão vazios
+            if (!altura || !peso || !metodo) {
+                abrirModalErro("Erro Campos Vazio , Não Foi Possivel Processar a Solicitação 500")
+                return;
+            }
+
+            const dados = {
+                altura: parseFloat(altura),
+                peso: parseFloat(peso),
+                metodo: metodo
+            };
+
+            metodo === "Robusto" ? abrirModalCarregamento() : false
+
+            // Realiza uma chamada AJAX para a rota '/calcular_imc' do Flask
+            fetch('/calcular_imc', {
+                method: 'POST',
+                body: JSON.stringify(dados),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'charset': 'UTF-8'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    fecharModalCarregamento();
+                    // Exibe o resultado do IMC na div 'resultado_imc'
+                    console.log(data)
+                    var resultadoIMC = document.getElementById("resultado_imc");
+
+
+                    let colorClass = "";
+
+                    if (data.categoria === "Magreza") {
+                        colorClass = "bg-red-100";
+                    } else if (data.categoria === "Normal") {
+                        colorClass = "bg-green-100";
+                    } else if (data.categoria === "Sobrepeso") {
+                        colorClass = "bg-yellow-100";
+                    } else if (data.categoria === "Obesidade") {
+                        colorClass = "bg-red-100";
+                    }
+
+                    resultadoIMC.innerHTML = `
+                    <h2>Seu IMC é: ${data.imc.toFixed(2)}</h2>
+                    <p class="${colorClass} border-1 p-3 border-gray-300 shadow-lg rounded-lg">Categoria: ${data.categoria}</p>
+                    `;
+                    let dataURI = encodeURIComponent(JSON.stringify(data));
+
+                    // console.log(dataURI)
+                    // contetResultAdicional
+                    if (data.peso_ideal) {
+                        contetResultAdicional.innerHTML = `
+                            <div class="card w-full transform transition duration-500 ease-in-out hover:rotate-1">
+                                            <div
+                                                class="card w-full transform transition duration-500 ease-in-out hover:rotate-1 w-full">
+                                                <div
+                                                    class="p-4  border-2 border-gray-300 shadow-lg rounded-lg bg-white w-full">
+                                                    <div class="header font-bold text-xl mb-2">Seu IMC Atual => ${data.imc.toFixed(2)} % Peso Ideal</div>
+                                                    <div class="body">
+                                                        <h4 class="title font-bold mb-2">Quanto Falta para o Peso ideal?</h4>
+                                                        <p class="text">Veja Quanto Falta para o Peso Ideal</p>
+                                                       <button type="button"
+                                                        class=" w-full inline-flex text-white bg-green-500 justify-center gap-2 align-items-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base"
+                                                        onclick="openGrafico('${dataURI}')">
+                                                        Veja Aqui!!!
+                                                        <span class="material-symbols-outlined">
+                                                        signal_cellular_alt
+                                                        </span>
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                        `
+                    }
+                    else {
+                        contetResultAdicional.innerHTML = ``
+                    }
+
+                    if (data.recomendacoes) {
+                        contetResultAdicional.innerHTML = ``
+
+                        contetResultAdicional.innerHTML = `
+    <div class="card w-full transform transition duration-500 ease-in-out hover:rotate-1">
+    </div>
+
+    <!-- Infográfico informativo -->
+    <div class="p-4 border-2 border-gray-300 shadow-lg rounded-lg bg-white w-full mt-4">
+        <h2 class="text-lg font-semibold mb-2">Informações Adicionais</h2>
+        <p>Aqui estão algumas informações úteis sobre refeições, atividades físicas e perda de peso:</p>
+        <ul class="mt-2">
+            <li>Nota Refeição</li>
+            <li>Nota Atividades Físicas</li>
+            <li>Preciso Perder Peso Quanto?</li>
+        </ul>
+    </div>
+
+    <!-- Botões com ícones -->
+    <div class="flex justify-center mt-4 space-x-4">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openNoteBlock('${dataURI}','refeicoes_horario')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="ml-2">Nota Refeição</span>
+        </button>
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"  onclick="openNoteBlock('${dataURI}','atividades_indicadas')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="ml-2">Nota Atividades Físicas</span>
+        </button>
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="openGrafico('${dataURI}')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="ml-2">Preciso Perder Peso</span>
+        </button>
+    </div>
+`;
+
+                    }
+
+                    // Define a cor do ícone e do botão com base na categoria
+                    var iconWrapper = document.getElementById("icon_wrapper");
+                    var resultIcon = document.getElementById("result_icon");
+                    var salvarImprimirBtn = document.getElementById("salvar_imprimir_btn");
+                    var corButtons = document.querySelector(".salvar_imprimir_btn");
+
+                    if (data.categoria === "Magreza") {
+                        iconWrapper.classList.remove("bg-green-100", "bg-yellow-100", "bg-red-100");
+                        iconWrapper.classList.add("bg-red-100");
+                        resultIcon.classList.remove("text-green-600", "text-yellow-600", "text-red-600");
+                        resultIcon.classList.add("text-red-600");
+                        salvarImprimirBtn.classList.remove("bg-green-600", "bg-yellow--600", "bg-red-600");
+                        salvarImprimirBtn.classList.add("bg-red-600");
+
+
+                        corButtons.classList.remove("bg-green-600", "bg-yellow--600", "bg-red-600");
+                        corButtons.classList.add("bg-red-600");
+                    } else if (data.categoria === "Normal") {
+                        iconWrapper.classList.remove("bg-green-100", "bg-yellow-100", "bg-red-100");
+                        iconWrapper.classList.add("bg-green-100");
+                        resultIcon.classList.remove("text-green-600", "text-yellow-600", "text-red-600");
+                        resultIcon.classList.add("text-green-600");
+                        salvarImprimirBtn.classList.remove("bg-green-600", "bg-yellow-600", "bg-red-600");
+                        salvarImprimirBtn.classList.add("bg-green-600");
+
+                        corButtons.classList.remove("bg-green-600", "bg-yellow-600", "bg-red-600");
+                        corButtons.classList.add("bg-green-600");
+                    } else if (data.categoria === "Sobrepeso") {
+                        iconWrapper.classList.remove("bg-green-100", "bg-yellow-100", "bg-red-100");
+                        iconWrapper.classList.add("bg-yellow-100");
+                        resultIcon.classList.remove("text-green-600", "text-yellow-600", "text-red-600");
+                        resultIcon.classList.add("text-yellow-600");
+                        salvarImprimirBtn.classList.remove("bg-green-600", "bg-yellow-600", "bg-red-600");
+                        salvarImprimirBtn.classList.add("bg-yellow-600");
+
+                        corButtons.classList.remove("bg-green-600", "bg-yellow-600", "bg-red-600");
+                        corButtons.classList.add("bg-yellow-600");
+                    } else if (data.categoria === "Obesidade") {
+                        iconWrapper.classList.remove("bg-green-100", "bg-yellow-100", "bg-red-100");
+                        iconWrapper.classList.add("bg-red-100");
+                        resultIcon.classList.remove("text-green-600", "text-yellow-600", "text-red-600");
+                        resultIcon.classList.add("text-red-600");
+                        salvarImprimirBtn.classList.remove("bg-green-600", "bg-yellow-600", "bg-red-600");
+                        salvarImprimirBtn.classList.add("bg-red-600");
+
+                        corButtons.classList.remove("bg-green-600", "bg-yellow-600", "bg-red-600");
+                        corButtons.classList.add("bg-red-600");
+                    }
+
+                    const salvarDB = document.getElementById("salvar_imprimir_btn")
+
+                    salvarDB.onclick = () => {
+
+                
+                        // Solicita o nome do usuário usando o SweetAlert
+                        Swal.fire({
+                            title: 'Digite o seu nome:',
+                            input: 'text',
+                            inputLabel: 'Seu nome',
+                            inputPlaceholder: 'Digite seu nome',
+                            showCancelButton: true,
+                            confirmButtonText: 'Salvar',
+                            cancelButtonText: 'Cancelar',
+                            inputValidator: (value) => {
+                                if (!value) {
+                                    return 'Você precisa digitar algo!';
+                                }
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const nomeUsuario = result.value;
+                                const dataAtual = new Date().toISOString();
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.onmouseenter = Swal.stopTimer;
+                                        toast.onmouseleave = Swal.resumeTimer;
+                                    }
+                                });
+                                Toast.fire({
+                                    icon: "success",
+                                    title: `Dados Criados Com Sucesso...`
+                                });
+                                $.ajax({
+                                    url: '/database/create',
+                                    method: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        imc: {
+                                            "dados_imc": data, "usuario": nomeUsuario,
+                                            "altura":data.altura,
+                                            "data": dataAtual,
+                                            "peso": Number(parseFloat(peso))
+                                        },
+                                        peso_ideal: { "dados_peso_ideal": data.peso_ideal } || { "dados_peso_ideal": "" },
+                                        recomendacoes: { "dados_peso_ideal": data.recomendacoes } || { "dados_peso_ideal": "" },
+                                    }),
+                                    success: function () {
+                                        $('#create-user-modal').addClass('hidden');
+                   
+                                    },
+                                    error: function () {
+                                        alert('Erro ao criar usuário.');
+                                    }
+                                });
+                            } else {
+                                alert('Cancelado');
+                            }
+                        });
+
+                    }
+                    abrirModal();
+                })
+                .catch(error => {
+                    fecharModalCarregamento();
+                    abrirModalErro(`'Ocorreu um erro:', ${error}`)
+                    console.error('Ocorreu um erro:', error);
+                });
+        }
+
+    </script>
+</div>

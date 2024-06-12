@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body-Health Splash Screen</title>
+    <link href="/plugins/TailwindCss/min.css" rel="stylesheet">
+    <link href="/plugins/MaterialIcon/icon.css" rel="stylesheet">
+    <script href="/plugins/tailwindCss/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 2s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600 h-screen flex items-center justify-center">
+    <div class="text-center fade-in">
+        <img src="/Assets/Logos/Logo.svg" alt="Body-Health Logo" class="mx-auto mb-6">
+        <h1 class="text-black text-5xl font-bold mb-4">Body-Health</h1>
+        <p class="text-gray-700 text-lg mb-8">Seu companheiro de saúde e bem-estar</p>
+        <button id="start-button"
+            class="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300"
+            onclick="handleClick()">
+            Construir Ambiente para Perder Peso
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div id="loading-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-10 rounded-lg shadow-lg text-center w-96">
+            <h2 class="text-3xl font-bold mb-6">Aguarde...</h2>
+            <div id="loading-messages" class="text-left text-gray-700 text-lg h-40 overflow-y-auto">
+                <!-- Mensagens de progresso vão aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            { text: "Construindo ambiente", icon: "build" },
+            { text: "Criando rotas", icon: "alt_route" },
+            { text: "Simplificando metas", icon: "done" },
+            { text: "Configurando sistema", icon: "settings" },
+            { text: "Otimizando performance", icon: "speed" }
+        ];
+
+        function handleClick() {
+            document.getElementById('start-button').classList.add('hidden');
+            document.getElementById('loading-modal').classList.remove('hidden');
+            addLoadingMessages(messages);
+            setTimeout(function () {
+                localStorage.setItem('lastUrl', '/calcular');
+                window.location.href = '/'; // substitua pelo URL de destino real
+            }, 5000); // Aguarda 5 segundos antes de redirecionar
+        }
+
+        function addLoadingMessages(messages) {
+            const messageElement = document.getElementById('loading-messages');
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    const messageHTML = `<p><span class="material-icons align-middle">${message.icon}</span> ${message.text}</p>`;
+                    messageElement.innerHTML += messageHTML;
+                    messageElement.scrollTop = messageElement.scrollHeight; // Scroll para a última mensagem
+                }, index * 1000); // Adiciona uma nova mensagem a cada segundo
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+configuration:
+- 127.0.0.1
+- '8080'
+- light
+database:
+- true
+- imc_db
+- dados_usuarios
+debug:
+- true
+openAI:
+- OpenIV
+server:
+- http
+sounds:
+- 'false'
+- GTTS
+- pt

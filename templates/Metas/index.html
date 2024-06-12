@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Atividades Físicas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .close {
+            color: #aaa;
+            align-self: flex-end;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+        }
+
+        .menu {
+            width: 25%;
+            padding: 10px;
+            border-right: 1px solid #ddd;
+        }
+
+        .component {
+            width: 75%;
+            padding: 10px;
+        }
+
+        .component.hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <button id="abrirModalButton" class="bg-blue-500 text-white px-4 py-2 rounded">Abrir Painel</button>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="content">
+                <div class="menu">
+                    <ul>
+                        <li><a href="#perfil">Perfil</a></li>
+                        <li><a href="#definir-data">Definir Data de Treino</a></li>
+                        <li><a href="#notificacoes">Notificações</a></li>
+                        <li><a href="#realizar-atividade">Realizar Atividade</a></li>
+                    </ul>
+                </div>
+                <div id="perfil" class="component">
+                    <h2 class="text-lg font-bold mb-4">Perfil</h2>
+                    <img src="placeholder.jpg" alt="Foto de Perfil">
+                    <p>Nome do Usuário</p>
+                    <p>Email: exemplo@example.com</p>
+                    <p>Idade: 30 anos</p>
+                    <p>Peso: 70 kg</p>
+                    <p>Altura: 1,75 m</p>
+                </div>
+                <div id="definir-data" class="component hidden">
+                    <h2 class="text-lg font-bold mb-4">Definir Data de Treino</h2>
+                    <label for="dataTreino" class="block mb-2">Data de Treino:</label>
+                    <input type="date" id="dataTreino" class="border border-gray-300 rounded px-2 py-1 mb-4">
+                </div>
+                <div id="notificacoes" class="component hidden">
+                    <h2 class="text-lg font-bold mb-4">Notificações</h2>
+                    <label for="notificar" class="inline-block mb-2">Notificar:</label>
+                    <input type="checkbox" id="notificar" class="mr-2">
+                </div>
+                <div id="realizar-atividade" class="component hidden">
+                    <h2 class="text-lg font-bold mb-4">Realizar Atividade</h2>
+                    <label for="realizada" class="inline-block mb-2">Atividade Realizada:</label>
+                    <input type="checkbox" id="realizada" class="mr-2">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtém o modal
+        var modal = document.getElementById("modal");
+
+        // Obtém o botão que abre o modal
+        var btn = document.getElementById("abrirModalButton");
+
+        // Obtém o <span> elemento que fecha o modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // Obtém todos os links do menu
+        var links = document.querySelectorAll('.menu a');
+
+        // Quando o usuário clica em qualquer link do menu
+        for (var i = 0; i < links.length; i++) {
+            links[i].onclick = function () {
+                // Obtém o alvo do link (o ID da seção)
+                var target = this.getAttribute('href').substring(1);
+                // Esconde todas as seções
+                var sections = document.querySelectorAll('.component');
+                for (var j = 0; j < sections.length; j++) {
+                    sections[j].classList.add('hidden');
+                }
+                // Mostra apenas a seção alvo
+                var section = document.getElementById(target);
+                section.classList.remove('hidden');
+            };
+        }
+
+        // Quando o usuário clica no botão, abre o modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // Quando o usuário clica em <span> (x), fecha o modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // Quando o usuário clica em qualquer lugar fora do modal, fecha o modal
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

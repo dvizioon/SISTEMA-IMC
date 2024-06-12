@@ -1,0 +1,6 @@
+flask
+PyYAML
+requests
+gtts 
+sqlite3
+pyinstaller

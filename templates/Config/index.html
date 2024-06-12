@@ -1,0 +1,204 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Configurações</h1>
+
+    <!-- Card para configurar o tema -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+        <h2 class="text-xl font-bold mb-2">Configurar Tema</h2>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Selecione o tema:</label>
+            <select id="select-theme" class="w-full p-2 border border-gray-300 rounded-md">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+        <button id="btn-apply-theme" class="mt-2 w-60 px-4 py-2 bg-blue-500 text-white rounded-md">Aplicar Tema</button>
+    </div>
+
+
+    <!-- Card para ativar a transcrição de texto -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4 flex flex-col gap-5">
+        <h2 class="text-xl font-bold mb-2">Ativar Transcrição de Texto</h2>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Selecione o idioma:</label>
+        <select id="select-language" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="">Selecione o Idioma...</option>
+            <option value="en">Inglês</option>
+            <option value="pt">Português</option>
+        </select>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Ativar Transcrição:</label>
+        <select id="select-transcription" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="true">Ativar</option>
+            <option value="false">Desativar</option>
+        </select>
+        <button id="btn-enable-transcription" class="mt-2 w-60 px-4 py-2 bg-blue-500 text-white rounded-md">Ativar
+            Transcrição</button>
+    </div>
+
+    <!-- Card para escolher o modelo de IA -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+        <h2 class="text-xl font-bold mb-2">Escolher Modelo de IA</h2>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Selecione o modelo:</label>
+        <select id="select-model" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="">Selecione o Modelo..</option>
+            <option value="OpenIV">OpenVAI</option>
+            <option value="PHI3">PHI-3</option>
+        </select>
+        <button id="btn-apply-model" class="mt-2 w-60 px-4 py-2 bg-blue-500 text-white rounded-md">Aplicar
+            Modelo</button>
+    </div>
+
+    <!-- Card para configurar serviço -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+        <h2 class="text-xl font-bold mb-2">Configurar Serviço</h2>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Porta:</label>
+        <input type="number" id="input-port" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Porta">
+        <label class="block text-sm font-medium text-gray-700 mb-1 mt-2">Host:</label>
+        <input type="text" id="input-host" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Host">
+        <label class="block text-sm font-medium text-gray-700 mb-1 mt-2">Segurança:</label>
+        <select id="select-security" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="">Selecione o Protocolo...</option>
+            <option value="http">Http</option>
+            <option value="https">Https</option>
+        </select>
+        <label class="block text-sm font-medium text-gray-700 mb-1 mt-2">Debug:</label>
+        <select id="select-debug" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="">deseja Ativar o Debug...</option>
+            <option value="true">Ativo</option>
+            <option value="false">Inativo</option>
+        </select>
+        <button id="btn-apply-service" class="mt-2 w-60 px-4 py-2 bg-blue-500 text-white rounded-md">Aplicar
+            Configuração</button>
+    </div>
+</div>
+
+<script>
+
+    async function getYaml(nomeVariavel, index = 0) {
+        const url = `/configuration?nome_variavel=${encodeURIComponent(nomeVariavel)}&index=${encodeURIComponent(index)}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na solicitação: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Erro ao obter o valor:', error);
+            return null;
+        }
+    }
+
+    async function putYaml(nomeVariavel, novoValor, index = 0) {
+        const url = '/configuration';
+        const formData = new URLSearchParams();
+        formData.append('nome_variavel', nomeVariavel);
+        formData.append('novo_valor', novoValor);
+        formData.append('index', index);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+            });
+            if (!response.ok) {
+                throw new Error(`Erro na solicitação: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Erro ao modificar o valor:', error);
+            return null;
+        }
+    }
+
+
+    async function defineVariaveis() {
+        const selectedTheme = document.getElementById('select-theme');
+        const selectedLanguage = document.getElementById('select-language');
+        const selectedTranscription = document.getElementById('select-transcription');
+        const selectedModel = document.getElementById('select-model');
+        const port = document.getElementById('input-port');
+        const host = document.getElementById('input-host');
+        const security = document.getElementById('select-security');
+        const debug = document.getElementById('select-debug');
+
+        const pt = await getYaml('sounds', 2)
+        const transcription = await getYaml('sounds', 0)
+        const thema = await getYaml('configuration', 2)
+        const _host = await getYaml('configuration', 0)
+        const _port = await getYaml('configuration', 1)
+        const _server = await getYaml('server', 0)
+        const _selectedModel = await getYaml('openAI', 0)
+        const _debug = await getYaml('debug', 0)
+
+
+        selectedLanguage.value = `${pt.sounds}`
+        selectedTranscription.value = `${transcription.sounds}`
+        selectedTheme.value = `${thema.configuration}`
+        host.value = _host.configuration
+        port.value = _port.configuration
+        security.value = _server.server
+        selectedModel.value = _selectedModel.openAI
+        debug.value = _debug.debug
+    }
+    defineVariaveis()
+
+
+
+    document.getElementById('btn-apply-theme').addEventListener('click', async function () {
+            const selectedTheme = document.getElementById('select-theme').value;
+            await putYaml("configuration", selectedTheme, 2);
+
+            const body = document.body;
+
+            if (selectedTheme === 'light') {
+                body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else if (selectedTheme === 'dark') {
+                body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+
+
+
+    document.getElementById('btn-enable-transcription').addEventListener('click', async function () {
+        const selectedLanguage = document.getElementById('select-language');
+        const selectedTranscription = document.getElementById('select-transcription');
+        await putYaml("sounds", selectedLanguage.value, 2)
+        await putYaml("sounds", selectedTranscription.value, 0)
+        Swal.fire(`Configurações Salvas com Sucesso...`);
+
+    });
+
+
+    document.getElementById('btn-apply-model').addEventListener('click', async function () {
+        const selectedModel = document.getElementById('select-model');
+        await putYaml("openAI", selectedModel.value, 0)
+        Swal.fire(`Modelo Alterado ${selectedModel.value}`);
+
+    });
+
+
+    document.getElementById('btn-apply-service').addEventListener('click', async function () {
+        const port = document.getElementById('input-port');
+        await putYaml("configuration", port.value, 1)
+        const host = document.getElementById('input-host');
+        await putYaml("configuration", host.value, 0)
+        const security = document.getElementById('select-security');
+        await putYaml("server", security.value, 0)
+
+        Swal.fire(`Configurações Salvas com Sucesso...`);
+
+    });
+</script>

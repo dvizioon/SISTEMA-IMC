@@ -1,0 +1,703 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Registros</h1>
+
+    <div class="mb-4">
+        <button class="info-btn bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center w-full"
+            id="openConfigureMeta">
+            <span class="material-icons">task</span>
+            <span class="ml-1"> Criar Plano</span>
+        </button>
+    </div>
+
+    <div id="modalNote" class="fixed z-20 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div style="cursor:pointer;"
+                            class="closeModalNote mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div class="mt-3 w-full text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Bloco de Notas <span class="material-symbols-outlined">
+                                    note_stack_add
+                                </span>
+                            </h3>
+                            <div style="display: flex; gap:1rem;">
+                                <div class="w-full text-left">
+                                    <h2 class="text-xl font-bold text-center">Refeições Indicadas</h2>
+                                    <pre id="blockNoteRefeicao"
+                                        class="blockNoteRefeicao resize border rounded-md overflow-hidden overflow-y-scroll disabled p-1"
+                                        disabled style="width: 100%; height: 25rem; white-space: pre-wrap;"></pre>
+                                </div>
+                                <div class="w-full text-left">
+                                    <h2 class="text-xl font-bold text-center">Atividades Indicadas</h2>
+                                    <pre id="blockNoteAtividades"
+                                        class="blockNoteAtividades resize border rounded-md overflow-hidden overflow-y-scroll disabled p-1"
+                                        disabled style="width: 100%; height: 25rem; white-space: pre-wrap;"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Imprimir
+                    </button>
+                    <button type="button"
+                        class="closeModalNote_2 mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalChart" class="hidden fixed z-20 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div style="cursor:pointer;"
+                            class="closeModalGrafico mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div
+                            style="width: 100%; display: flex; align-items: center;flex-direction:column; justify-content: center;height: 100%;">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Peso Ideal
+                            </h3>
+                            <div class="mt-2 w-full flex flex-col items-center justify-center">
+                                <div class="w-full flex flex-wrap justify-around">
+                                    <canvas id="myChart1" class="m-2"></canvas>
+                                    <canvas id="myChart2" class="m-2"></canvas>
+                                    <canvas id="myChart3" class="m-2"></canvas>
+                                </div>
+                                <div class="myCalculoCharts p-5 mt-4 flex flex-wrap gap-3 justify-center w-full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="usuarios-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    </div>
+
+    <div id="ConfigureUserModal" class="modal fixed inset-0 flex items-center justify-center hidden">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+
+            <!-- Content -->
+            <div class="modal-content py-4 text-left px-6">
+                <!-- Title -->
+                <div class="flex justify-between items-center pb-3">
+                    <p class="text-2xl font-bold">Configurar Meta</p>
+                    <button id="closeModal"
+                        class="modal-close cursor-pointer z-50 focus:outline-none text-3xl">×</button>
+                </div>
+
+                <!-- Campo de Pesquisa -->
+                <div class="mb-4">
+                    <label for="pesquisar" class="block text-lg font-medium">Pesquisar:</label>
+                    <input type="text" id="pesquisar" name="pesquisar"
+                        class="w-full border rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Search Users...">
+                </div>
+
+                <!-- Radios -->
+                <div id="addUsuarios" class="mb-4">
+                    <p class="text-lg font-medium mb-2">Selecione o Usuário Para Meta:</p>
+                </div>
+
+
+                <!-- Botão de Criar Meta -->
+                <div class="flex justify-end">
+                    <button id="criarMeta" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Criar
+                        Meta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var myChart1, myChart2, myChart3;
+
+    function isEmptyObject(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+    }
+
+    function formatDecimal(value) {
+        return value.toFixed(2);
+    }
+
+    document.querySelector('.closeModalGrafico').addEventListener("click", () => {
+        document.getElementById("modalChart").classList.add("hidden");
+        if (window.myChart != null) {
+            window.myChart.destroy();
+        }
+    })
+
+    document.querySelector('.closeModalNote').addEventListener("click", () => {
+
+        document.getElementById("modalNote").classList.add("hidden");
+    });
+
+    document.querySelector('.closeModalNote_2').addEventListener("click", () => {
+        document.getElementById("modalNote").classList.add("hidden");
+    });
+
+    function openGrafico(data) {
+
+        let dataChart = JSON.parse(decodeURIComponent(data));
+        // console.log(dataChart);
+
+        // Verificação de dados
+        const { categoria, imc, peso_ideal } = dataChart;
+        // console.log(categoria)
+        const {
+            altura = 0,
+            categoria: categoria_imc = "N/A",
+            imc: imc_atual = 0,
+            peso_a_ajustar = 0,
+            peso_atual = 0,
+            peso_ideal: peso_ideal_ajustado = 0,
+            porcentagem_ajuste = 0
+        } = dataChart || {};
+
+        // Destrói os gráficos existentes, se houver
+        if (myChart1) myChart1.destroy();
+        if (myChart2) myChart2.destroy();
+        if (myChart3) myChart3.destroy();
+
+        // Criação do primeiro gráfico (coluna)
+        var ctx1 = document.getElementById('myChart1').getContext('2d');
+        myChart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['IMC Atual', 'Peso Ideal'],
+                datasets: [{
+                    label: "Valores",
+                    data: [imc_atual, peso_ideal_ajustado],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'IMC Atual e Peso Ideal'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let value = context.raw;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                return context.label + ': ' + value + ' (' + percentage + ')';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Criação do segundo gráfico
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        myChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Peso Atual', 'Peso a Ajustar'],
+                datasets: [{
+                    label: "Pesos",
+                    data: [peso_atual, peso_a_ajustar],
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Peso Atual e Peso a Ajustar'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let value = context.raw;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                return context.label + ': ' + value + ' (' + percentage + ')';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Criação do terceiro gráfico
+        var ctx3 = document.getElementById('myChart3').getContext('2d');
+        myChart3 = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['Altura', 'Peso Atual', 'Peso Ideal'],
+                datasets: [{
+                    label: "Medidas",
+                    data: [altura, peso_atual, peso_ideal_ajustado],
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Altura e Pesos'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let value = context.raw;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                return context.label + ': ' + value + ' (' + percentage + ')';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Criação dos cards
+        const cardContainer = document.querySelector(".myCalculoCharts");
+        cardContainer.innerHTML = ''; // Limpa os cards anteriores
+        const cardData = [
+            { title: "Altura", value: altura + " cm", icon: "📏", color: "bg-blue-100" },
+            { title: "Categoria IMC", value: categoria_imc, icon: "🔍", color: "bg-green-100" },
+            { title: "IMC Atual", value: imc_atual, icon: "📊", color: "bg-red-100" },
+            { title: "Peso a Ajustar", value: peso_a_ajustar + " kg", icon: "⚖️", color: "bg-yellow-100" },
+            { title: "Peso Atual", value: peso_atual + " kg", icon: "🏋️", color: "bg-purple-100" },
+            { title: "Peso Ideal Ajustado", value: peso_ideal_ajustado + " kg", icon: "🎯", color: "bg-pink-100" },
+            { title: "Porcentagem de Ajuste", value: porcentagem_ajuste + "%", icon: "📈", color: "bg-teal-100" }
+        ];
+
+        cardData.forEach(card => {
+            const cardElement = document.createElement("div");
+            cardElement.classList.add("card", "p-4", card.color, "rounded-lg", "shadow-md", "flex-grow", "min-w-[150px]", "hover:bg-opacity-75", "transition", "duration-300", "ease-in-out", "transform", "hover:scale-105", "cursor-pointer");
+            cardElement.innerHTML = `
+            <div class="card-header flex items-center">
+                <span class="text-2xl mr-2">${card.icon}</span>
+                <h3 class="text-lg font-semibold">${card.title}</h3>
+            </div>
+            <div class="card-body mt-2">
+                <p class="text-sm">${card.value}</p>
+            </div>
+        `;
+            cardContainer.appendChild(cardElement);
+        });
+
+        document.getElementById("modalChart").classList.remove("hidden");
+    }
+
+    function openNoteBlock(data) {
+        let dataAI = JSON.parse(decodeURIComponent(data));
+        const { atividades_indicadas, refeicoes_horario } = dataAI;
+
+
+        // Selecionando o elemento do modal
+        const modalNote = document.getElementById("modalNote");
+
+        // Removendo a classe 'hidden' para exibir o modal
+        modalNote.classList.remove("hidden");
+
+        // Selecionando o blockNote onde as recomendações serão exibidas
+        const blockNoteRefeicao = document.getElementById('blockNoteRefeicao')
+        const blockNoteAtividades = document.getElementById('blockNoteAtividades')
+
+        blockNoteRefeicao.innerHTML = ""
+        blockNoteAtividades.innerHTML = ""
+
+        const refeicoesHorario = formatarRecomendacoes(refeicoes_horario.response);
+        blockNoteRefeicao.innerHTML += "Horários das Refeições:\n" + refeicoesHorario;
+
+
+        // Formatando e adicionando as recomendações de atividades indicadas
+        const atividadesIndicadas = formatarRecomendacoes(atividades_indicadas.response);
+        blockNoteAtividades.innerHTML += "Atividades Recomendadas:\n" + atividadesIndicadas + "\n\n";
+
+
+
+
+    }
+
+    function formatarRecomendacoes(recomendacoes) {
+        // Remove os delimitadores específicos como '$@$v=v1.13$@$'
+        let textoFormatado = recomendacoes.replace(/\$@\$\w+=v\d+\.\d+\$@\$/g, "");
+
+        // Substitua ** por negrito e * por -
+        textoFormatado = textoFormatado.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+        textoFormatado = textoFormatado.replace(/\*/g, "-");
+
+        return textoFormatado;
+    }
+
+    $(document).ready(function () {
+
+        const cardContainer = document.querySelector("#usuarios-container");
+        cardContainer.innerHTML = '';
+
+        function fetchUsuariosData() {
+            $.ajax({
+                url: '/database/show',
+                method: 'GET',
+                success: function (data) {
+                    const container = $('#usuarios-container');
+                    container.empty();
+
+
+                    function imcIdela(data) {
+                        let dataIMCDecode = JSON.parse(decodeURIComponent(data));
+
+                        // console.log(dataIMCDecode.peso_ideal.dados_peso_ideal)
+
+
+                        let dataEncodePeso_ideal = encodeURIComponent(JSON.stringify(dataIMCDecode.peso_ideal.dados_peso_ideal))
+
+                        // console.log(dataEncodePeso_ideal)
+
+                        return (`
+                                  <div class="body">        
+                                            <button type="button"
+                                                        class=" w-full inline-flex text-white bg-green-500 justify-center gap-2 align-items-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base"
+                                                        onclick="openGrafico('${dataEncodePeso_ideal}')">
+                                                        <span class="material-symbols-outlined">
+                                                        calculate
+                                                        </span>
+                                                        Medidas
+                                                    </button>
+                                                    </div>
+                            `)
+                    }
+
+                    function imcRecomendacoes(data) {
+
+                        let dataIMCDecode = JSON.parse(decodeURIComponent(data));
+
+                        let dataIMCDecodeNote = encodeURIComponent(JSON.stringify(dataIMCDecode.recomendacoes.dados_peso_ideal))
+
+                        return (`
+                                  <div class="body">        
+                                            <button type="button"
+                                                onclick="openNoteBlock('${dataIMCDecodeNote}')"
+                                                        class=" w-full inline-flex text-white bg-green-500 justify-center gap-2 align-items-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base">
+                                                        <span class="material-symbols-outlined">
+                                                        footprint
+                                                        </span>
+                                                        Receita
+                                                    </button>
+                                                    </div>
+                            `)
+                    }
+
+
+                    data.forEach(function (usuario) {
+                        let dataURI = encodeURIComponent(JSON.stringify(usuario));
+                        // console.log(usuario);
+                        img_sobrepeso = [
+                            'https://i.pinimg.com/originals/02/5e/91/025e9125663fc9d61bb7acd91a1db527.gif',
+                            'https://i.pinimg.com/originals/ee/d7/71/eed771aeaaa425d9706c9fac5435899a.gif',
+                            'https://i.pinimg.com/originals/f1/04/ca/f104ca9dc7a7626ca4e587792da17554.gif',
+                            'https://i.pinimg.com/originals/5f/e2/d0/5fe2d01784f6e09ecf77c9083d065c9a.gif',
+                            'https://i.pinimg.com/originals/86/b8/ef/86b8ef3940203384aa6a48989af49b0e.gif'
+                        ]
+
+                        // Determinar a cor do card com base no IMC
+                        let corCard = '';
+                        let imagemUrl = '';
+                        let imc = usuario.imc.dados_imc.imc
+                        // console.log(imc)
+                        if (imc < 18.5) {
+                            corCard = 'bg-green-100'; // Verde claro para Magreza
+                            imagemUrl = img_sobrepeso[Math.floor(Math.random() * img_sobrepeso.length)]; // URL da imagem para Magreza
+                        } else if (imc >= 18.5 && imc < 24.9) {
+                            corCard = 'bg-green-100'; // Azul claro para Normal
+                            imagemUrl = 'https://i.pinimg.com/originals/5a/cc/f9/5accf9de526481c45c7d52120b697f03.gif'; // URL da imagem para Normal
+                        } else if (imc >= 24.9 && imc < 30) {
+                            corCard = 'bg-yellow-100'; // Laranja claro para Sobrepeso
+                            imagemUrl = img_sobrepeso[Math.floor(Math.random() * img_sobrepeso.length)]; // URL da imagem para Sobrepeso
+                        } else {
+                            corCard = 'bg-red-100'; // Vermelho claro para Obesidade
+                            imagemUrl = img_sobrepeso[Math.floor(Math.random() * img_sobrepeso.length)]; // URL da imagem para Obesidade
+                        }
+
+
+                        const card = `
+        <div class="shadow-md w-full h-full rounded-lg p-4 mb-4 ${corCard}">
+            <h class="mx-1 font-bold text-xl">Nome: ${usuario.imc.usuario}</h>
+            <details class="mt-2 bg-gray-100 rounded p-4 shadow-md mb-4">
+            <summary class="font-bold cursor-pointer">Abri Perfil</summary>
+            <p><strong>Registro:</strong> ${new Date(usuario.imc.data).toLocaleString()}</p>
+            <div class="flex justify-between items-center mt-2">
+                <p><strong>IMC:</strong> ${usuario.imc.dados_imc.imc}</p>
+                <p><strong>Categoria:</strong> ${usuario.imc.dados_imc.categoria}</p>
+                 <p><strong>Altura:</strong> ${formatDecimal(usuario.imc.dados_imc.altura)}</p>
+            </div>
+        </details>
+    
+            
+            <div class="flex justify-center items-center">
+                ${imagemUrl ? `<img  src="${imagemUrl}"  alt="Imagem Categoria IMC" style="width:50%;">` : ''}
+            </div>
+            <hr class="my-2"/>
+            <div class="flex justify-between items-center">
+                <div class="w-full flex justify-center items-center" title='Sem Percentual'>${!isEmptyObject(usuario.peso_ideal) ? imcIdela(dataURI) : "<span class='cursor-pointer opacity-50 text-gray-800 material-symbols-outlined'>info</span>"}</div>
+                <div class="w-full flex justify-center items-center" title='Sem Recomendações'>${!isEmptyObject(usuario.recomendacoes) ? imcRecomendacoes(dataURI) : "<span class='cursor-pointer opacity-50 text-gray-800 material-symbols-outlined'>info</span>"}</div>
+            </div>
+            <div class="flex justify-end mt-2">
+                <button class="delete-btn bg-red-500 text-white px-4 py-2 rounded flex items-center justify-center mr-2 w-full" data-id="${usuario.id}">
+                    <span class="material-icons">delete</span>
+                    <span class="ml-1">Deletar</span>
+                </button>
+              
+            </div>
+        </hr>
+    `;
+                        container.append(card);
+                    });
+
+
+                    $('.delete-btn').click(function () {
+                        const userId = $(this).data('id');
+                        deleteUsuario(userId);
+                    });
+                },
+                error: function () {
+                    alert('Erro ao buscar usuários.');
+                }
+            });
+        }
+
+        function deleteUsuario(id) {
+            $.ajax({
+                url: `/database/delete/${id}`,
+                method: 'DELETE',
+                success: function () {
+                    fetchUsuariosData();
+                },
+                error: function () {
+                    alert('Erro ao deletar usuário.');
+                }
+            });
+        }
+
+        fetchUsuariosData();
+    });
+</script>
+
+<script>
+
+
+    function perderKilos(data) {
+
+        console.log(data.dados_imc.imc)
+        console.log(data.peso)
+        console.log(data.altura)
+
+        const pesoAtual = data.peso; // Peso atual do usuário em kg
+        const altura = data.altura; // Altura do usuário em metros
+        const imcAtual = data.dados_imc.imc; // IMC atual do usuário
+
+        Swal.fire({
+            title: 'Escolha seu IMC desejado ' + data.usuario,
+            html: `
+                <div>
+                    <p>Altura: ${altura.toFixed(2)}</p>
+                    <p>Peso Atual: ${pesoAtual}</p>
+                    <p>Imc Atual: ${imcAtual}</p>
+                    <input type="range" id="imcRange" min="18" max="24" step="0.1" value="${imcAtual}" class="w-full mb-4">
+                    <p>IMC desejado: <span id="imcValue">18.0</span></p>
+                    <p>Peso necessário: <span id="desiredWeight">Calculando...</span> kg</p>
+                    <p>Quilos a perder: <span id="kilosToLose">Calculando...</span> kg</p>
+                </div>`,
+            showCancelButton: true,
+            confirmButtonText: 'Enviar',
+            cancelButtonText: 'Cancelar',
+            didOpen: () => {
+                const imcRange = Swal.getPopup().querySelector('#imcRange');
+                const imcValue = Swal.getPopup().querySelector('#imcValue');
+                const desiredWeight = Swal.getPopup().querySelector('#desiredWeight');
+                const kilosToLose = Swal.getPopup().querySelector('#kilosToLose');
+
+                const calcularValores = () => {
+                    const imcDesejado = parseFloat(imcRange.value);
+                    imcValue.textContent = imcDesejado.toFixed(1);
+
+                    // Calcula o peso necessário para atingir o IMC desejado
+                    const novoPeso = (imcDesejado * (altura * altura)).toFixed(1);
+                    desiredWeight.textContent = novoPeso;
+
+                    // Calcula a quantidade de quilos a perder
+                    const quilos = (pesoAtual - novoPeso).toFixed(1);
+                    kilosToLose.textContent = quilos;
+                };
+
+                // Listener para atualizar valores conforme o slider é movido
+                imcRange.addEventListener('input', calcularValores);
+
+                // Inicializa valores
+                calcularValores();
+            },
+            preConfirm: () => {
+                const imcDesejado = Swal.getPopup().querySelector('#imcRange').value;
+                return {
+                    imcDesejado: imcDesejado,
+                    pesoDesejado: Swal.getPopup().querySelector('#desiredWeight').textContent,
+                    quilosParaPerder: Swal.getPopup().querySelector('#kilosToLose').textContent
+                };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { imcDesejado, pesoDesejado, quilosParaPerder } = result.value;
+                // Aqui você pode enviar os dados para a sua API
+                const dados = {
+                    imcDesejado: imcDesejado,
+                    pesoDesejado: pesoDesejado,
+                    quilosParaPerder: quilosParaPerder
+                };
+                console.log(JSON.stringify(dados, null, 2));
+            }
+        });
+    }
+
+    // Botão para abrir o modal
+    var openModalBtn = document.getElementById('openConfigureMeta');
+    var modalConfigureTask = document.getElementById('ConfigureUserModal');
+    var closeModalBtn = document.getElementById('closeModal');
+    var createTask = document.getElementById('criarMeta');
+
+
+    openModalBtn.addEventListener('click', function () {
+
+        $.ajax({
+            url: '/database/show',
+            method: 'GET',
+            success: function (data) {
+
+                data.forEach((usuarios) => {
+
+                    const {
+                        imc
+                    } = usuarios || {}
+
+
+                    const sendObject = encodeURIComponent(JSON.stringify(imc))
+
+                    const UserContent = `
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="user" value="${sendObject}" class="form-checkbox text-blue-500">
+                        <span class="ml-2">${imc.usuario}</span>
+                        </label>
+                        
+                    `
+
+                    // criarMeta
+                    // const radios =
+
+                    document.getElementById('addUsuarios').innerHTML += UserContent
+
+                })
+
+                document.getElementById("criarMeta").addEventListener('click', () => {
+             
+                    var usuarioSelecionado = document.querySelector('input[name="user"]:checked');
+
+                    if (usuarioSelecionado) {
+                        const usuarioValor = JSON.parse(decodeURIComponent(usuarioSelecionado.value))
+                
+
+                        Swal.fire({
+                            title: "Está No Caminho!",
+                            text: "Ok Vamos Configura a Mesa "+usuarioValor.usuario,
+                            confirmButtonText: "OK"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                perderKilos(usuarioValor)
+                            }
+                        })
+                        // console.log(usuarioValor)
+                       
+                    } else {
+                        console.log("Nenhum usuário selecionado.");
+                    }
+                });
+
+
+            }
+        }).catch((err) => {
+            throw new Error(err)
+        })
+
+        modalConfigureTask.classList.remove('hidden');
+    });
+
+    closeModalBtn.addEventListener('click', function () {
+        modalConfigureTask.classList.add('hidden');
+    });
+    window.addEventListener('click', function (event) {
+        if (event.target === modal) {
+            modalConfigureTask.classList.add('hidden');
+        }
+    });
+    modalConfigureTask.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+
+
+</script>
+
+
+</body>
+
+</html>

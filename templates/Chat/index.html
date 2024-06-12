@@ -1,0 +1,182 @@
+
+
+<button
+    class="fixed bottom-4 right-10 bg-gray-700 text-white p-2 rounded-full shadow-lg flex items-center justify-center gap-3 focus:outline-none">
+    <img id="toggleChat"
+        src="/Assets/Bot/_c2a64cc8-cf5a-40df-a7be-1b3bdf4677c5.jpg" alt="Bot Avatar" class="w-12 h-12 rounded-full">
+</button>
+
+<div id="chatContainer"
+    class="containerAssistent flex flex-col justify-center bg-white rounded-lg shadow-md p-6 max-w-md w-full fixed transition-all duration-500 ease-in-out transform translate-y-full"
+    style="right: 4rem;bottom: 0rem;">
+    <div class="flex items-center justify-between w-full mb-4">
+        <div class="headerProfile flex items-center">
+            <img src="/Assets/Logos/Logo.svg" alt="Bot Avatar" class="w-12 h-12 rounded-full mr-2">
+            <h1 class="text-xl font-semibold">Assistente de Saúde</h1>
+        </div>
+        <i id="toggleHeight" class="material-icons cursor-pointer text-gray-500">expand_more</i>
+    </div>
+    <div id="chat" class="mb-4 overflow-auto h-full overflow-hidden overflow-y-scroll" style="max-height: 400px;">
+    </div>
+    <input type="text" id="userInput" placeholder="Digite sua pergunta..."
+        class="border rounded px-3 py-2 w-full focus:outline-none focus:ring focus:border-blue-300">
+</div>
+
+<script>
+    $(document).ready(function () {
+        const chatDiv = $('#chat');
+        const userInput = $('#userInput');
+        const chatContainer = $('#chatContainer');
+        const toggleChatButton = $('#toggleChat');
+        const toggleHeightIcon = $('#toggleHeight');
+
+        toggleChatButton.on('click', function () {
+            chatContainer.toggleClass('translate-y-full');
+            const isCollapsed = chatContainer.hasClass('translate-y-full');
+            toggleChatButton.find('i').text(isCollapsed ? 'chat' : 'close');
+        });
+
+        toggleHeightIcon.on('click', function () {
+            chatContainer.toggleClass('translate-y-full');
+            toggleChatButton.find('i').text('chat');
+        });
+
+        function askQuestion(question) {
+
+            if (question.toLowerCase() === '/clear') {
+                clearChat();
+                return;
+            }
+
+            displayMessage(question, 'user');
+            displayBotProfile(); // Adiciona o perfil do bot antes da resposta
+            displayLoadingIndicator();
+
+            const requestData = {
+                altura: 170,
+                peso: 70,
+                imc: 24.2,
+                tipo: "ask",
+                question: question
+            };
+
+      
+            $.ajax({
+                url: 'http://127.0.0.1:8080/api/model/OpenIV',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(requestData), 
+                success: function (response) {
+
+                    console.log(response);
+                    hideLoadingIndicator();
+                    displayMessage(response.response, 'bot');
+                },
+                error: function (xhr, status, error) {
+
+                    console.error('Erro na requisição AJAX:', error);
+                    hideLoadingIndicator();
+                    displayMessage('Desculpe, ocorreu um erro ao buscar a resposta.', 'bot');
+                }
+            });
+        }
+
+         function clearChat() {
+            chatDiv.empty();
+            displayMessage('Chat limpo!', 'bot');
+        }
+
+        function displayMessage(message, sender) {
+            const messageDiv = $('<div></div>').addClass('message').text(message);
+            if (sender === 'user') {
+                messageDiv.addClass('user-message ml-auto bg-green-400');
+            } else {
+                messageDiv.addClass('bot-message mr-auto bg-gray-300');
+            }
+            chatDiv.append(messageDiv);
+            chatDiv.scrollTop(chatDiv.prop('scrollHeight'));
+        }
+
+        function displayLoadingIndicator() {
+            const loadingIndicator = $('<div class="loaderBot"></div>');
+            chatDiv.append(loadingIndicator);
+            chatDiv.scrollTop(chatDiv.prop('scrollHeight'));
+        }
+
+        function hideLoadingIndicator() {
+            $('.loaderBot').remove();
+        }
+
+        
+
+        function displayBotProfile() {
+            const botProfileDiv = $('<div class="flex items-center mb-2"></div>');
+            const botAvatarImg = $('<img src="/Assets/Bot/_c2a64cc8-cf5a-40df-a7be-1b3bdf4677c5.jpg" alt="Bot Nanda" class="w-8 h-8 rounded-full mr-2">');
+            const botName = $('<h2 class="text-sm font-medium">Nanda (BOT)</h2>');
+            botProfileDiv.append(botAvatarImg, botName);
+            chatDiv.append(botProfileDiv);
+        }
+
+        userInput.on('keypress', function (e) {
+            if (e.which === 13) {
+                const question = $(this).val().trim();
+                if (question !== '') {
+                    askQuestion(question);
+                    $(this).val('');
+                }
+            }
+        });
+
+        // Iniciar o chat com uma saudação
+        displayMessage('Olá! Pergunte-me sobre hábitos saudáveis.', 'bot');
+    });
+</script>
+<style>
+    .containerAssistent {
+        height: 35rem;
+        /* 560px */
+    }
+
+    .message {
+        width: fit-content;
+        max-width: 80%;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        border-radius: 20px;
+    }
+
+    .user-message {
+        color: white;
+    }
+
+    .bot-message {
+        color: black;
+    }
+
+    .loaderBot {
+        border: 8px solid #f3f3f3;
+        /* Light grey */
+        border-top: 8px solid #3498db;
+        /* Blue */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .translate-y-full {
+        transform: translateY(100%);
+    }
+</style>
