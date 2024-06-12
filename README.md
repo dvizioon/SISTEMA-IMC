@@ -87,7 +87,7 @@ SISTEMA-IMC/
 ```
 - Para Você implementar um nova AI com mais otimização você pode usar essa funçao para retonar as infomações coletadas nos componentes 
 
->![NOTE]
+> [!NOTE] 
 > Observer que o Modelo principal é o Arquivo `Components/OpenIV/index.py`
 
 ## Usando Micro Serviço API
