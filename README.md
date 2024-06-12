@@ -254,7 +254,7 @@ graph TD
     B --> C[Simples Response]
     C --> D[altura: 1.8, peso: 89, metodo: Normal]
     A --> E[Diferencial]
-    E --> F[Calc Response 18 < || > 24]
+    E --> F["Calc Response 18 < || > 24"]
     F --> G[categoria: Sobrepeso, imc: 27.47, peso_ideal: 77.76, categoria_ideal: acima do ideal, imc_atual: 27.47, peso_a_ajustar: 11.24, peso_atual: 89.0, porcentagem_ajuste: 12.63]
     A --> H[Robusto]
     H --> I[Voce pode Experimentar]
