@@ -251,11 +251,13 @@ def getSound(audio_key):
 ```mermaid
 graph TD
     A[Componente Select IMC - Abstraction] --> B[Normal]
-    B --> C[Simples Response: {altura: 1.8, peso: 89, metodo: Normal}]
-    A --> D[Diferencial]
-    D --> E[Calc Response 18 < || > 24: {altura: 1.8, categoria: Sobrepeso, imc: 27.47, peso_ideal: {altura: 1.8, categoria: acima do ideal, imc: 27.47, imc_atual: 27.47, peso_a_ajustar: 11.24, peso_atual: 89.0, peso_ideal: 77.76, porcentagem_ajuste: 12.63}}]
-    A --> F[Robusto]
-    F --> G[Voce pode Experimentar]
+    B --> C[Simples Response]
+    C --> D[{altura: 1.8, peso: 89, metodo: Normal}]
+    A --> E[Diferencial]
+    E --> F[Calc Response 18 < || > 24]
+    F --> G[{altura: 1.8, categoria: Sobrepeso, imc: 27.47, peso_ideal: {altura: 1.8, categoria: acima do ideal, imc: 27.47, imc_atual: 27.47, peso_a_ajustar: 11.24, peso_atual: 89.0, peso_ideal: 77.76, porcentagem_ajuste: 12.63}}]
+    A --> H[Robusto]
+    H --> I[Voce pode Experimentar]
 
 
 ```
