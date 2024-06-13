@@ -224,7 +224,7 @@ def getSound(audio_key):
 
 ```
 
-> [!ALERT]
+> [!WARNING]  
 >Observação: /roteamento {"url": f"/api/audio/<audio_key>", "method": ["GET"], "function":getSound} => MimeType:audio/mpeg
 
 
