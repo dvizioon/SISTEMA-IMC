@@ -30,7 +30,7 @@ Este projeto é uma aplicação web desenvolvida em Python utilizando o framewor
 - **SQLite:** Banco de dados utilizado para armazenar informações dos usuários.
 - **JSON:** Formato de armazenamento de dados no banco de dados.
 - **OPENIV (Engenharia Social):** Implementação de uma IA para cálculos e recomendações de Atividades fisicas e Alimentação.
-> [!CAUTION]
+> [!IMPORTANT]
 >Observação o PHI-3 é um novo modelo generativo de IA, então será necessário 🫵 baixar: https://ollama.com/library/phi3
 
 
@@ -219,7 +219,7 @@ def getSound(audio_key):
 
 ```
 
-> [!CAUTION]
+> [!ALERT]
 >Observação: /roteamento {"url": f"/api/audio/<audio_key>", "method": ["GET"], "function":getSound} => MimeType:audio/mpeg
 
 
@@ -236,12 +236,12 @@ def getSound(audio_key):
    ```shell
    -------------------
    > Linux:
-   python -m venv imc 
+   python -m venv venv 
    source venv/bin/activate
 
    -------------------
    > Windows:
-   python -m venv imc 
+   python -m venv venv 
    source imc/Scripts/activate
 
    ```
